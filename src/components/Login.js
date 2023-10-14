@@ -1,14 +1,19 @@
 import { useRef, useState } from "react";
 import Header from "./Header";
 import checkValidData from "../utils/validate";
-import { createUserWithEmailAndPassword,signInWithEmailAndPassword  } from "firebase/auth";
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile } from "firebase/auth";
 import {auth} from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { USER_AVTAR } from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true); //hook used to access variables
   const [errorMessage, seterrorMessage] = useState(null);
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
+  const dispatch = useDispatch();
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
@@ -27,6 +32,25 @@ const Login = () => {
           .then((userCredential) => {
             // Signed up 
             const user = userCredential.user;
+
+            updateProfile(user, {
+                displayName: name.current.value, photoURL: USER_AVTAR
+              }).then(() => {
+                const { uid, email, displayName, photoURL } = auth.currentUser;
+                dispatch(
+                  addUser({
+                    uid: uid,
+                    email: email,
+                    displayName: displayName,
+                    photoURL: photoURL,
+                  })
+                );
+                // navigate("/browse");
+              }).catch((error) => {
+                // An error occurred
+                seterrorMessage(error.message);
+              });
+
             console.log(user);
           })
           .catch((error) => {
@@ -40,7 +64,7 @@ const Login = () => {
           // Signed in 
           const user = userCredential.user;
           console.log(user);
-
+        //   navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -63,6 +87,7 @@ const Login = () => {
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
         {!isSignInForm && <input
+          ref={name}
           type="text"
           placeholder="Full Name"
           className="p-2 px-4 my-2 w-full bg-gray-700"
