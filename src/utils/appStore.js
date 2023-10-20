@@ -5,6 +5,7 @@ import moviesReducer from "./moviesSlice";
 import gptReducer from "./gptSlice";
 import configReducer from "./configSlice";
 
+//add reducers in store
 const appStore = configureStore({
     reducer: {
         user: userReducer,

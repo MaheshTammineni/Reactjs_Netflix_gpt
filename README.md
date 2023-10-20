@@ -38,6 +38,16 @@
 - GPT Search Page
 - GPT Search Bar
 - (BONUS) Multi-language Feature in our App
+- To integrate ChatGPT go to platform OpenAI go to personal click api keys generate and use the key
+- Now install openAI from npm package(to make API calls directly)
+- Gpt search API Call
+- fetched gptMoviesSuggestions from TMDB
+- created gptSlice added data
+- reused movie list component to make movie suggestion container
+- Memoization
+- Added .env files
+- Adding .env file to gitignore
+- Made our site Responsive
 
 
 we are using GPT API's(built by openAI company) on top of the integrate with user interface and we were plug those API's into our app.
